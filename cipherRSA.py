@@ -9,6 +9,7 @@
 import random
 import sys
 import math
+import textwrap
 
 from random import randrange
 
@@ -184,26 +185,48 @@ def decrypt(publicKey, ciphertext):
 
 
 
-#wantsToContinue1= True
-#while(wantsToContinue1==True):
-#    print("Welcome to our RSA encripter/decripter please choose one of the following options:\n 1) Encode a message\n 2) Decode a message\n 3) Exit")
-#    choosedOption= int(input())
-#    if(choosedOption==1):
-#        print("Please type the message you want to encript: ")
-#        stringToEncode= input()
-#        modifiedString= changer(stringToEncode,letterToNumber)
-#        for i in modifiedString:
-#            numToAppend=Encription(publicKeys,i)
-#            print(numToAppend)
-#            inMod26=numToAppend%26
-#            print(inMod26)
-#            backToString=numbersToLetters[inMod26]
-#            encondedString.append(backToString)
-#        print(encondedString)
-#    elif(choosedOption==2):
-#        print("Please type the message you want to decript:")
-#    elif(choosedOption==3):
-#        print("Cy@")
-#        wantsToContinue1= False
+wantsToContinue1= True
+print("------ Welcome to our RSA encripter/decripter ------\b")
+    
+print("Generating recommended public/private keypairs . . .")
+public, private = generateKeypair()
+print("PUBLIC KEY: ", public, " - PRIVATE KEY: ", private, "\n\n")
 
+while(wantsToContinue1==True):
+    
+    print("Please choose one of the following options:\n 1) Encode a message\n 2) Decode a message\n 3) Exit")
+    choosedOption= int(input())
 
+    if(choosedOption==1):
+        print("Please type the MESSAGE you want to encrypt: ")
+        message = input()
+        print("Please type the PRIVATE KEY, comma separated (example: 23,19): ")
+        keypair= input()
+        result = [x.strip() for x in keypair.split(',')]
+
+        privateKey = int(result[0]), int(result[1])        
+        encryptedMessage = encrypt(privateKey, message)
+        print(encryptedMessage)
+
+        print("Encrypted message is: ")
+        print(','.join(map(lambda x: str(x), encryptedMessage)))
+    
+    elif(choosedOption==2):
+        print("Please type the MESSAGE you want to decrypt:")
+        encryptedMessage = input()
+        print("Please type the PUBLIC KEY, comma separated (example: 23,19): ")
+        keypair= input()
+        result = [x.strip() for x in keypair.split(',')]
+
+        publicKey = int(result[0]), int(result[1]) 
+
+        #Converting crypted text to array of bytes
+        encryptedMessage = [x.strip() for x in encryptedMessage.split(',')]
+        bytesCrypted = [int(i) for i in encryptedMessage]
+
+        print("Your message is:")
+        print(decrypt(publicKey, bytesCrypted))
+
+    elif(choosedOption==3):
+        print("Good bye bro ;)")
+        wantsToContinue1= False
